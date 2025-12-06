@@ -1,5 +1,6 @@
 import { Header } from '@/components/Header';
 import { UploadStep } from '@/components/steps/UploadStep';
+import { ReaderStep } from '@/components/steps/ReaderStep';
 import { SummaryStep } from '@/components/steps/SummaryStep';
 import { QuizStep } from '@/components/steps/QuizStep';
 import { FeedbackStep } from '@/components/steps/FeedbackStep';
@@ -9,6 +10,8 @@ const Index = () => {
   const {
     currentStep,
     sessionId,
+    pdfFile,
+    pdfUrl,
     summary,
     quiz,
     userAnswers,
@@ -17,6 +20,7 @@ const Index = () => {
     error,
     setError,
     uploadPDF,
+    processPDF,
     generateQuiz,
     setAnswer,
     submitQuiz,
@@ -37,6 +41,17 @@ const Index = () => {
             isLoading={isLoading}
             error={error}
             onUpload={uploadPDF}
+            onClearError={clearError}
+          />
+        )}
+
+        {currentStep === 'reader' && pdfUrl && pdfFile && (
+          <ReaderStep
+            pdfUrl={pdfUrl}
+            fileName={pdfFile.name}
+            isLoading={isLoading}
+            error={error}
+            onProceed={processPDF}
             onClearError={clearError}
           />
         )}
