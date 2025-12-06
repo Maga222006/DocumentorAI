@@ -82,19 +82,19 @@ export function QuizStep({
           <CardContent className="text-center space-y-6">
             <div className="flex items-center justify-center gap-8 text-sm flex-wrap">
               <div className="text-center">
-                <div className="text-3xl font-semibold">{quiz.length}</div>
+                <div className="text-3xl font-semibold text-foreground">{quiz.length}</div>
                 <div className="text-muted-foreground">Questions</div>
               </div>
               <div className="h-12 w-px bg-border hidden sm:block" />
               <div className="text-center">
-                <div className="text-3xl font-semibold">
+                <div className="text-3xl font-semibold text-foreground">
                   {quiz.filter((q) => q.task_type === 'multiple_choice' || q.task_type === 'true_false').length}
                 </div>
                 <div className="text-muted-foreground">Multiple Choice</div>
               </div>
               <div className="h-12 w-px bg-border hidden sm:block" />
               <div className="text-center">
-                <div className="text-3xl font-semibold">
+                <div className="text-3xl font-semibold text-foreground">
                   {quiz.filter((q) => q.task_type !== 'multiple_choice' && q.task_type !== 'true_false').length}
                 </div>
                 <div className="text-muted-foreground">Type In</div>
