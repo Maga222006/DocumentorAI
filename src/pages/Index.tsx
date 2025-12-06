@@ -118,15 +118,18 @@ const Index = () => {
               pdfUrl={pdfUrl}
               fileName={pdfFile.name}
               isLoading={isLoading}
+              isSummaryReady={!!summary}
               error={error}
-              onProceed={processPDF}
+              onProceed={goToSummary}
               onClearError={clearError}
             />
-            <ChatPanel
-              messages={chatMessages}
-              isLoading={isLoading}
-              onSendMessage={sendMessage}
-            />
+            {summary && (
+              <ChatPanel
+                messages={chatMessages}
+                isLoading={isLoading}
+                onSendMessage={sendMessage}
+              />
+            )}
           </>
         )}
 

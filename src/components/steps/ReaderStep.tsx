@@ -9,6 +9,7 @@ interface ReaderStepProps {
   pdfUrl: string;
   fileName: string;
   isLoading: boolean;
+  isSummaryReady: boolean;
   error: string | null;
   onProceed: () => void;
   onClearError: () => void;
@@ -18,6 +19,7 @@ export function ReaderStep({
   pdfUrl,
   fileName,
   isLoading,
+  isSummaryReady,
   error,
   onProceed,
   onClearError,
@@ -63,17 +65,17 @@ export function ReaderStep({
         <div className="border-t p-4">
           <Button
             onClick={onProceed}
-            disabled={isLoading}
+            disabled={!isSummaryReady}
             className="w-full"
           >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing Document...
+                Generating Summary...
               </>
             ) : (
               <>
-                Generate Summary
+                Summary
                 <ArrowRight className="ml-2 h-4 w-4" />
               </>
             )}
@@ -116,17 +118,17 @@ export function ReaderStep({
 
           <Button
             onClick={onProceed}
-            disabled={isLoading}
+            disabled={!isSummaryReady}
             className="w-full"
           >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing Document...
+                Generating Summary...
               </>
             ) : (
               <>
-                Generate Summary
+                Summary
                 <ArrowRight className="ml-2 h-4 w-4" />
               </>
             )}

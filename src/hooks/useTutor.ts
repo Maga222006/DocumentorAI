@@ -36,16 +36,48 @@ export function useTutor() {
     setState(prev => ({ ...prev, isLoading }));
   }, []);
 
-  const uploadPDF = useCallback((file: File) => {
+  const uploadPDF = useCallback(async (file: File) => {
     const pdfUrl = URL.createObjectURL(file);
     setState(prev => ({
       ...prev,
       pdfFile: file,
       pdfUrl,
       currentStep: 'reader',
+      isLoading: true,
       error: null,
     }));
-    return true;
+
+    // Auto-start processing
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(`${API_BASE_URL}/summarizer`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Upload failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      setState(prev => ({
+        ...prev,
+        sessionId: data.session_id,
+        summary: data.summary,
+        isLoading: false,
+        error: null,
+      }));
+
+      return true;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to process document';
+      setState(prev => ({ ...prev, error: message, isLoading: false }));
+      return false;
+    }
   }, []);
 
   const processPDF = useCallback(async () => {
