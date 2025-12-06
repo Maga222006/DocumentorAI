@@ -65,7 +65,7 @@ export function useTutor() {
     }
   }, []);
 
-  const generateQuiz = useCallback(async (counts: { multipleChoice: number; fillGap: number; typeIn: number }) => {
+  const generateQuiz = useCallback(async (numQuestions: number) => {
     if (!state.sessionId) {
       setError('No session found. Please upload a document first.');
       return false;
@@ -79,9 +79,7 @@ export function useTutor() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           session_id: state.sessionId,
-          num_multiple_choice: counts.multipleChoice,
-          num_fill_gap: counts.fillGap,
-          num_type_in: counts.typeIn,
+          num_questions: numQuestions,
         }),
       });
 
