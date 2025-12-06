@@ -61,7 +61,7 @@ export function FeedbackStep({
         <CardHeader className="text-center pb-3">
           <CardTitle>Your Feedback</CardTitle>
           <CardDescription>
-            Chat with Documentor for more insights
+            Chat with Documentor AI for more insights
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
