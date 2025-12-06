@@ -6,7 +6,7 @@ import { QuizStep } from '@/components/steps/QuizStep';
 import { FeedbackStep } from '@/components/steps/FeedbackStep';
 import { useTutor } from '@/hooks/useTutor';
 import { Step } from '@/types/tutor';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 const Index = () => {
   const {
@@ -32,8 +32,14 @@ const Index = () => {
     goToReader,
     setStep,
   } = useTutor();
+  const [supervisorFeedback, setSupervisorFeedback] = useState<string | undefined>(undefined);
 
   const clearError = () => setError(null);
+
+  const handleNewQuizFromFeedback = useCallback((feedback?: string) => {
+    setSupervisorFeedback(feedback);
+    goToSummary();
+  }, [goToSummary]);
 
   // Determine which steps can be navigated to
   const canNavigateTo = useCallback((step: Step): boolean => {
@@ -122,6 +128,7 @@ const Index = () => {
             summary={summary}
             isLoading={isLoading}
             error={error}
+            supervisorFeedback={supervisorFeedback}
             onGenerateQuiz={generateQuiz}
             onGoToReader={goToReader}
             onClearError={clearError}
@@ -147,7 +154,7 @@ const Index = () => {
             error={error}
             onSendMessage={sendMessage}
             onNewDocument={resetSession}
-            onNewQuiz={goToSummary}
+            onNewQuiz={handleNewQuizFromFeedback}
             onGoToReader={goToReader}
             onClearError={clearError}
           />
