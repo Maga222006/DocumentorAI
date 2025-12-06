@@ -11,11 +11,12 @@ import ReactMarkdown from 'react-markdown';
 interface ChatPanelProps {
   messages: ChatMessage[];
   isLoading: boolean;
+  autoOpen?: boolean;
   onSendMessage: (message: string) => Promise<boolean>;
 }
 
-export function ChatPanel({ messages, isLoading, onSendMessage }: ChatPanelProps) {
-  const [open, setOpen] = useState(true);
+export function ChatPanel({ messages, isLoading, autoOpen = false, onSendMessage }: ChatPanelProps) {
+  const [open, setOpen] = useState(autoOpen);
   const [input, setInput] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
