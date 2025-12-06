@@ -29,7 +29,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header currentStep={currentStep} />
+      <Header currentStep={currentStep} onNewDocument={resetSession} />
       
       <main className="container mx-auto px-4 py-8 max-w-2xl">
         {currentStep === 'upload' && (
