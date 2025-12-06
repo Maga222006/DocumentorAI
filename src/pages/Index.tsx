@@ -7,7 +7,7 @@ import { FeedbackStep } from '@/components/steps/FeedbackStep';
 import { ChatPanel } from '@/components/ChatPanel';
 import { useTutor } from '@/hooks/useTutor';
 import { Step } from '@/types/tutor';
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 const Index = () => {
   const {
@@ -37,6 +37,15 @@ const Index = () => {
   } = useTutor();
 
   const clearError = () => setError(null);
+
+  // Track if chat has been shown once (auto-open only on first summary generation)
+  const [hasShownChat, setHasShownChat] = useState(false);
+
+  useEffect(() => {
+    if (summary && !hasShownChat) {
+      setHasShownChat(true);
+    }
+  }, [summary, hasShownChat]);
 
   const handleNewQuizFromFeedback = useCallback(() => {
     goToSummary();
@@ -127,6 +136,7 @@ const Index = () => {
               <ChatPanel
                 messages={chatMessages}
                 isLoading={isLoading}
+                autoOpen={!hasShownChat}
                 onSendMessage={sendMessage}
               />
             )}
@@ -147,6 +157,7 @@ const Index = () => {
             <ChatPanel
               messages={chatMessages}
               isLoading={isLoading}
+              autoOpen={false}
               onSendMessage={sendMessage}
             />
           </>
