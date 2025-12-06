@@ -6,9 +6,11 @@ import { Button } from './ui/button';
 interface HeaderProps {
   currentStep: Step;
   onNewDocument?: () => void;
+  onNavigate?: (step: Step) => void;
+  canNavigateTo?: (step: Step) => boolean;
 }
 
-export function Header({ currentStep, onNewDocument }: HeaderProps) {
+export function Header({ currentStep, onNewDocument, onNavigate, canNavigateTo }: HeaderProps) {
   const showNewDocumentButton = currentStep === 'summary' || currentStep === 'feedback';
 
   return (
@@ -40,7 +42,11 @@ export function Header({ currentStep, onNewDocument }: HeaderProps) {
             )}
           </div>
           <div className="w-full bg-primary-foreground/10 backdrop-blur-sm rounded-2xl p-4">
-            <StepIndicator currentStep={currentStep} />
+            <StepIndicator 
+              currentStep={currentStep} 
+              onNavigate={onNavigate}
+              canNavigateTo={canNavigateTo}
+            />
           </div>
         </div>
       </div>
