@@ -214,12 +214,15 @@ export function useTutor() {
     }));
 
     try {
+      // Escape curly braces to prevent LangChain template variable conflicts
+      const sanitizedMessage = message.replace(/\{/g, '{{').replace(/\}/g, '}}');
+      
       const response = await fetch(`${API_BASE_URL}/supervisor`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           session_id: sessionId,
-          message: message,
+          message: sanitizedMessage,
         }),
       });
 
