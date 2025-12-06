@@ -6,7 +6,7 @@ import { QuizStep } from '@/components/steps/QuizStep';
 import { FeedbackStep } from '@/components/steps/FeedbackStep';
 import { useTutor } from '@/hooks/useTutor';
 import { Step } from '@/types/tutor';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 const Index = () => {
   const {
@@ -18,6 +18,7 @@ const Index = () => {
     quiz,
     userAnswers,
     chatMessages,
+    lastQuizFeedback,
     isLoading,
     error,
     setError,
@@ -32,12 +33,10 @@ const Index = () => {
     goToReader,
     setStep,
   } = useTutor();
-  const [supervisorFeedback, setSupervisorFeedback] = useState<string | undefined>(undefined);
 
   const clearError = () => setError(null);
 
-  const handleNewQuizFromFeedback = useCallback((feedback?: string) => {
-    setSupervisorFeedback(feedback);
+  const handleNewQuizFromFeedback = useCallback(() => {
     goToSummary();
   }, [goToSummary]);
 
@@ -128,7 +127,7 @@ const Index = () => {
             summary={summary}
             isLoading={isLoading}
             error={error}
-            supervisorFeedback={supervisorFeedback}
+            supervisorFeedback={lastQuizFeedback ?? undefined}
             onGenerateQuiz={generateQuiz}
             onGoToReader={goToReader}
             onClearError={clearError}

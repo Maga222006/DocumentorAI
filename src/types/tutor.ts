@@ -36,6 +36,7 @@ export interface TutorState {
   quiz: QuizQuestion[] | null;
   userAnswers: string[];
   chatMessages: ChatMessage[];
+  lastQuizFeedback: string | null;
   isLoading: boolean;
   error: string | null;
 }

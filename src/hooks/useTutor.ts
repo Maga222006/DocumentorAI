@@ -12,6 +12,7 @@ const initialState: TutorState = {
   quiz: null,
   userAnswers: [],
   chatMessages: [],
+  lastQuizFeedback: null,
   isLoading: false,
   error: null,
 };
@@ -190,6 +191,7 @@ export function useTutor() {
       setState(prev => ({
         ...prev,
         chatMessages: [...prev.chatMessages, ...newMessages],
+        lastQuizFeedback: data.response,
         currentStep: 'feedback',
         isLoading: false,
         error: null,

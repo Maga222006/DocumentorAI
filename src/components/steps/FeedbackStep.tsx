@@ -15,7 +15,7 @@ interface FeedbackStepProps {
   error: string | null;
   onSendMessage: (message: string) => Promise<boolean>;
   onNewDocument: () => void;
-  onNewQuiz: (supervisorFeedback?: string) => void;
+  onNewQuiz: () => void;
   onGoToReader: () => void;
   onClearError: () => void;
 }
@@ -153,11 +153,7 @@ export function FeedbackStep({
         </Button>
         <Button
           variant="outline"
-          onClick={() => {
-            // Get the last assistant message as supervisor feedback
-            const lastAssistantMessage = [...messages].reverse().find(m => m.role === 'assistant');
-            onNewQuiz(lastAssistantMessage?.content);
-          }}
+          onClick={onNewQuiz}
           className="flex-1"
         >
           <RefreshCw className="mr-2 h-4 w-4" />
