@@ -3,12 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { PdfViewer } from '@/components/PdfViewer';
-import { ArrowRight, Loader2, Maximize2, X } from 'lucide-react';
+import { ArrowRight, Maximize2, X } from 'lucide-react';
 
 interface ReaderStepProps {
   pdfUrl: string;
   fileName: string;
-  isLoading: boolean;
   isSummaryReady: boolean;
   error: string | null;
   onProceed: () => void;
@@ -18,7 +17,6 @@ interface ReaderStepProps {
 export function ReaderStep({
   pdfUrl,
   fileName,
-  isLoading,
   isSummaryReady,
   error,
   onProceed,
@@ -62,25 +60,17 @@ export function ReaderStep({
         </div>
 
         {/* Fullscreen Footer */}
-        <div className="border-t p-4">
-          <Button
-            onClick={onProceed}
-            disabled={!isSummaryReady}
-            className="w-full"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating Summary...
-              </>
-            ) : (
-              <>
-                Summary
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </>
-            )}
-          </Button>
-        </div>
+        {isSummaryReady && (
+          <div className="border-t p-4">
+            <Button
+              onClick={onProceed}
+              className="w-full"
+            >
+              Summary
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </div>
     );
   }
@@ -116,23 +106,15 @@ export function ReaderStep({
 
           {error && <ErrorMessage message={error} onDismiss={onClearError} />}
 
-          <Button
-            onClick={onProceed}
-            disabled={!isSummaryReady}
-            className="w-full"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating Summary...
-              </>
-            ) : (
-              <>
-                Summary
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </>
-            )}
-          </Button>
+          {isSummaryReady && (
+            <Button
+              onClick={onProceed}
+              className="w-full"
+            >
+              Summary
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          )}
         </CardContent>
       </Card>
     </div>
