@@ -96,7 +96,7 @@ export function useTutor() {
     }
   }, [setError]);
 
-  const generateQuiz = useCallback(async (numQuestions: number) => {
+  const generateQuiz = useCallback(async (numQuestions: number, comment?: string) => {
     const { sessionId } = stateRef.current;
     
     if (!sessionId) {
@@ -107,13 +107,19 @@ export function useTutor() {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
+      const requestBody: { session_id: string; num_questions: number; comment?: string } = {
+        session_id: sessionId,
+        num_questions: numQuestions,
+      };
+      
+      if (comment) {
+        requestBody.comment = comment;
+      }
+
       const response = await fetch(`${API_BASE_URL}/examiner`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          session_id: sessionId,
-          num_questions: numQuestions,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
