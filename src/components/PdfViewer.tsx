@@ -12,9 +12,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 interface PdfViewerProps {
   fileUrl: string;
+  scale?: number;
 }
 
-export function PdfViewer({ fileUrl }: PdfViewerProps) {
+export function PdfViewer({ fileUrl, scale = 1 }: PdfViewerProps) {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageInput, setPageInput] = useState<string>('1');
@@ -120,10 +121,11 @@ export function PdfViewer({ fileUrl }: PdfViewerProps) {
         >
           <Page
             pageNumber={pageNumber}
+            scale={scale}
             renderTextLayer={true}
             renderAnnotationLayer={true}
             className="shadow-lg"
-            key={pageNumber}
+            key={`${pageNumber}-${scale}`}
             loading={
               <div className="flex items-center justify-center h-64">
                 <LoadingSpinner className="w-6 h-6" />
