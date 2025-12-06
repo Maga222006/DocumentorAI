@@ -51,7 +51,7 @@ export function StepIndicator({ currentStep, onNavigate, canNavigateTo }: StepIn
               )}
               title={step.label}
             >
-              {isCompleted ? <Check className="h-3.5 w-3.5" /> : step.icon}
+              {step.icon}
             </button>
             {index < steps.length - 1 && (
               <div
