@@ -63,8 +63,8 @@ const Index = () => {
         // Can only go to quiz if there's an active quiz (don't allow jumping to quiz from other steps)
         return !!quiz && currentStep === 'feedback';
       case 'feedback':
-        // Can go to feedback if we have a summary (after processing PDF)
-        return !!summary;
+        // Can only go to feedback if quiz has been taken (have chat messages from quiz submission)
+        return chatMessages.length > 0;
       default:
         return false;
     }
@@ -117,7 +117,6 @@ const Index = () => {
             <ReaderStep
               pdfUrl={pdfUrl}
               fileName={pdfFile.name}
-              isLoading={isLoading}
               isSummaryReady={!!summary}
               error={error}
               onProceed={goToSummary}
