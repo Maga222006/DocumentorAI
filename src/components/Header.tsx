@@ -18,7 +18,7 @@ export function Header({ currentStep, onNewDocument, onNavigate, canNavigateTo }
       <div className="container flex h-14 max-w-screen-2xl items-center">
         <div className="mr-4 flex items-center gap-2">
           <GraduationCap className="h-6 w-6" />
-          <span className="font-semibold">AI Tutor</span>
+          <span className="font-semibold">Documentor</span>
         </div>
         
         <div className="flex flex-1 items-center justify-center">
