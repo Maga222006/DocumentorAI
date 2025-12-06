@@ -48,7 +48,13 @@ export function useTutor() {
   }, []);
 
   const processPDF = useCallback(async () => {
-    const { pdfFile } = stateRef.current;
+    const { pdfFile, summary } = stateRef.current;
+    
+    // If summary already exists, just navigate to it
+    if (summary) {
+      setState(prev => ({ ...prev, currentStep: 'summary', error: null }));
+      return true;
+    }
     
     if (!pdfFile) {
       setError('No PDF file found. Please upload a document first.');
