@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { PdfViewer } from '@/components/PdfViewer';
-import { ArrowRight, FileText } from 'lucide-react';
+import { ArrowRight, FileText, Loader2 } from 'lucide-react';
 
 interface ReaderStepProps {
   pdfUrl: string;
@@ -24,22 +24,19 @@ export function ReaderStep({
 }: ReaderStepProps) {
   return (
     <div className="space-y-6 animate-fade-in">
-      <Card className="glass-card">
-        <CardHeader className="text-center pb-4">
-          <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <FileText className="w-6 h-6 text-primary" />
-          </div>
-          <CardTitle className="text-2xl">Review Your Document</CardTitle>
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle>Review Your Document</CardTitle>
           <CardDescription>
             Take a moment to review your PDF before generating the summary
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="text-sm text-muted-foreground text-center mb-2">
+          <p className="text-sm text-muted-foreground text-center">
             {fileName}
-          </div>
+          </p>
           
-          <div className="w-full h-[60vh] rounded-lg border border-border overflow-hidden">
+          <div className="w-full h-[60vh] rounded-md border overflow-hidden">
             <PdfViewer fileUrl={pdfUrl} />
           </div>
 
@@ -49,17 +46,16 @@ export function ReaderStep({
             onClick={onProceed}
             disabled={isLoading}
             className="w-full"
-            size="lg"
           >
             {isLoading ? (
               <>
-                <LoadingSpinner className="mr-2 w-4 h-4" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Processing Document...
               </>
             ) : (
               <>
                 Generate Summary
-                <ArrowRight className="ml-2 w-4 h-4" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </>
             )}
           </Button>

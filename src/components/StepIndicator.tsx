@@ -9,11 +9,11 @@ interface StepIndicatorProps {
 }
 
 const steps: { key: Step; label: string; icon: React.ReactNode }[] = [
-  { key: 'upload', label: 'Upload', icon: <Upload className="w-4 h-4" /> },
-  { key: 'reader', label: 'Read', icon: <BookOpen className="w-4 h-4" /> },
-  { key: 'summary', label: 'Summary', icon: <FileText className="w-4 h-4" /> },
-  { key: 'quiz', label: 'Quiz', icon: <HelpCircle className="w-4 h-4" /> },
-  { key: 'feedback', label: 'Feedback', icon: <MessageSquare className="w-4 h-4" /> },
+  { key: 'upload', label: 'Upload', icon: <Upload className="h-3.5 w-3.5" /> },
+  { key: 'reader', label: 'Read', icon: <BookOpen className="h-3.5 w-3.5" /> },
+  { key: 'summary', label: 'Summary', icon: <FileText className="h-3.5 w-3.5" /> },
+  { key: 'quiz', label: 'Quiz', icon: <HelpCircle className="h-3.5 w-3.5" /> },
+  { key: 'feedback', label: 'Feedback', icon: <MessageSquare className="h-3.5 w-3.5" /> },
 ];
 
 const stepOrder: Step[] = ['upload', 'reader', 'summary', 'quiz', 'feedback'];
@@ -28,7 +28,7 @@ export function StepIndicator({ currentStep, onNavigate, canNavigateTo }: StepIn
   };
 
   return (
-    <div className="flex items-center justify-center w-full max-w-2xl mx-auto px-4">
+    <div className="flex items-center gap-1">
       {steps.map((step, index) => {
         const isCompleted = index < currentIndex;
         const isActive = index === currentIndex;
@@ -36,38 +36,27 @@ export function StepIndicator({ currentStep, onNavigate, canNavigateTo }: StepIn
         const isClickable = canNavigateTo?.(step.key) ?? false;
 
         return (
-          <div key={step.key} className="flex items-center flex-1 last:flex-initial">
-            <div className="flex flex-col items-center">
-              <button
-                type="button"
-                onClick={() => handleClick(step.key)}
-                disabled={!isClickable}
-                className={cn(
-                  'step-indicator transition-transform',
-                  isActive && 'step-indicator-active',
-                  isCompleted && 'step-indicator-completed',
-                  isPending && 'step-indicator-pending',
-                  isClickable && 'cursor-pointer hover:scale-110 hover:ring-2 hover:ring-primary-foreground/50',
-                  !isClickable && 'cursor-default'
-                )}
-              >
-                {isCompleted ? <Check className="w-4 h-4" /> : step.icon}
-              </button>
-              <span
-                className={cn(
-                  'mt-2 text-xs font-medium transition-colors duration-300 hidden sm:block',
-                  isActive && 'text-primary',
-                  isCompleted && 'text-primary',
-                  isPending && 'text-muted-foreground'
-                )}
-              >
-                {step.label}
-              </span>
-            </div>
+          <div key={step.key} className="flex items-center">
+            <button
+              type="button"
+              onClick={() => handleClick(step.key)}
+              disabled={!isClickable}
+              className={cn(
+                'step-indicator',
+                isActive && 'step-indicator-active',
+                isCompleted && 'step-indicator-completed',
+                isPending && 'step-indicator-pending',
+                isClickable && 'cursor-pointer hover:opacity-80',
+                !isClickable && 'cursor-default'
+              )}
+              title={step.label}
+            >
+              {isCompleted ? <Check className="h-3.5 w-3.5" /> : step.icon}
+            </button>
             {index < steps.length - 1 && (
               <div
                 className={cn(
-                  'step-connector',
+                  'step-connector w-8',
                   index < currentIndex ? 'step-connector-active' : 'step-connector-pending'
                 )}
               />
