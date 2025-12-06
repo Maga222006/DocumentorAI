@@ -7,19 +7,29 @@ import { Slider } from '@/components/ui/slider';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ErrorMessage } from '@/components/ErrorMessage';
 
+export interface QuestionCounts {
+  multipleChoice: number;
+  fillGap: number;
+  typeIn: number;
+}
+
 interface SummaryStepProps {
   summary: string;
   isLoading: boolean;
   error: string | null;
-  onGenerateQuiz: (numQuestions: number) => Promise<boolean>;
+  onGenerateQuiz: (counts: QuestionCounts) => Promise<boolean>;
   onClearError: () => void;
 }
 
 export function SummaryStep({ summary, isLoading, error, onGenerateQuiz, onClearError }: SummaryStepProps) {
-  const [numQuestions, setNumQuestions] = useState(5);
+  const [multipleChoice, setMultipleChoice] = useState(2);
+  const [fillGap, setFillGap] = useState(2);
+  const [typeIn, setTypeIn] = useState(1);
+
+  const totalQuestions = multipleChoice + fillGap + typeIn;
 
   const handleGenerateQuiz = async () => {
-    await onGenerateQuiz(numQuestions);
+    await onGenerateQuiz({ multipleChoice, fillGap, typeIn });
   };
 
   if (isLoading) {
@@ -74,25 +84,62 @@ export function SummaryStep({ summary, isLoading, error, onGenerateQuiz, onClear
         </div>
         
         <div className="space-y-6">
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <label className="text-sm font-medium text-foreground">
-                Number of Questions
-              </label>
-              <span className="text-2xl font-bold text-primary">{numQuestions}</span>
+          <div className="grid gap-6">
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <label className="text-sm font-medium text-foreground">
+                  Multiple Choice
+                </label>
+                <span className="text-xl font-bold text-primary">{multipleChoice}</span>
+              </div>
+              <Slider
+                value={[multipleChoice]}
+                onValueChange={(value) => setMultipleChoice(value[0])}
+                min={0}
+                max={5}
+                step={1}
+                className="w-full"
+              />
             </div>
-            <Slider
-              value={[numQuestions]}
-              onValueChange={(value) => setNumQuestions(value[0])}
-              min={1}
-              max={10}
-              step={1}
-              className="w-full"
-            />
-            <div className="flex justify-between text-xs text-muted-foreground mt-2">
-              <span>1</span>
-              <span>10</span>
+
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <label className="text-sm font-medium text-foreground">
+                  Fill in the Gap
+                </label>
+                <span className="text-xl font-bold text-accent">{fillGap}</span>
+              </div>
+              <Slider
+                value={[fillGap]}
+                onValueChange={(value) => setFillGap(value[0])}
+                min={0}
+                max={5}
+                step={1}
+                className="w-full"
+              />
             </div>
+
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <label className="text-sm font-medium text-foreground">
+                  Type In (Short Answer)
+                </label>
+                <span className="text-xl font-bold text-primary">{typeIn}</span>
+              </div>
+              <Slider
+                value={[typeIn]}
+                onValueChange={(value) => setTypeIn(value[0])}
+                min={0}
+                max={5}
+                step={1}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          <div className="p-4 bg-muted/50 rounded-lg text-center">
+            <span className="text-sm text-muted-foreground">Total Questions: </span>
+            <span className="text-xl font-bold text-primary">{totalQuestions}</span>
           </div>
 
           <Button

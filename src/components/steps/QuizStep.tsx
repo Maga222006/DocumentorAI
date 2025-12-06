@@ -85,24 +85,32 @@ export function QuizStep({
             <HelpCircle className="w-12 h-12 text-primary" />
           </div>
           <div className="space-y-4 mb-8">
-            <div className="flex items-center justify-center gap-8 text-sm flex-wrap">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">{quiz.length}</div>
-                <div className="text-muted-foreground">Questions</div>
-              </div>
-              <div className="h-12 w-px bg-border hidden sm:block" />
-              <div className="text-center">
-                <div className="text-3xl font-bold text-accent">
+            <div className="text-center mb-6">
+              <div className="text-4xl font-bold text-primary">{quiz.length}</div>
+              <div className="text-muted-foreground">Total Questions</div>
+            </div>
+            <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="p-4 rounded-lg bg-muted/50">
+                <div className="text-2xl font-bold text-primary">
                   {quiz.filter((q) => q.task_type === 'multiple_choice').length}
                 </div>
-                <div className="text-muted-foreground">Multiple Choice</div>
+                <div className="text-xs text-muted-foreground mt-1">Multiple Choice</div>
               </div>
-              <div className="h-12 w-px bg-border hidden sm:block" />
-              <div className="text-center">
-                <div className="text-3xl font-bold text-accent">
-                  {quiz.filter((q) => q.task_type !== 'multiple_choice').length}
+              <div className="p-4 rounded-lg bg-muted/50">
+                <div className="text-2xl font-bold text-accent">
+                  {quiz.filter((q) => 
+                    q.task_type === 'fill_in_the_blank' || 
+                    q.task_type === 'fill_gap' || 
+                    q.task_type === 'fill_blank'
+                  ).length}
                 </div>
-                <div className="text-muted-foreground">Other</div>
+                <div className="text-xs text-muted-foreground mt-1">Fill in the Gap</div>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/50">
+                <div className="text-2xl font-bold text-primary">
+                  {quiz.filter((q) => q.task_type === 'short_answer').length}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">Type In</div>
               </div>
             </div>
           </div>
