@@ -57,8 +57,8 @@ const Index = () => {
         // Can only go to quiz if there's an active quiz (don't allow jumping to quiz from other steps)
         return !!quiz && currentStep === 'feedback';
       case 'feedback':
-        // Can go to feedback if we have chat messages (quiz was submitted at least once)
-        return chatMessages.length > 0 && currentStep !== 'quiz';
+        // Can go to feedback if we have chat messages
+        return chatMessages.length > 0;
       default:
         return false;
     }
