@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ErrorMessage } from '@/components/ErrorMessage';
@@ -38,6 +39,29 @@ export function QuizStep({
   const allAnswered = answeredCount === quiz.length;
   const question = quiz[currentQuestion];
 
+  // Helper to determine question type display
+  const getQuestionTypeLabel = (type: string) => {
+    switch (type) {
+      case 'multiple_choice':
+        return 'Multiple Choice';
+      case 'true_false':
+        return 'True or False';
+      case 'short_answer':
+        return 'Short Answer';
+      case 'fill_in_the_blank':
+      case 'fill_gap':
+      case 'fill_blank':
+        return 'Fill in the Blank';
+      default:
+        return type.replace(/_/g, ' ');
+    }
+  };
+
+  // Check if a question type should show options (if available) or text input
+  const isFillBlankType = (type: string) => {
+    return ['fill_in_the_blank', 'fill_gap', 'fill_blank'].includes(type);
+  };
+
   if (isLoading) {
     return (
       <Card className="p-12 shadow-card animate-fade-in">
@@ -61,19 +85,19 @@ export function QuizStep({
             <HelpCircle className="w-12 h-12 text-primary" />
           </div>
           <div className="space-y-4 mb-8">
-            <div className="flex items-center justify-center gap-8 text-sm">
+            <div className="flex items-center justify-center gap-8 text-sm flex-wrap">
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary">{quiz.length}</div>
                 <div className="text-muted-foreground">Questions</div>
               </div>
-              <div className="h-12 w-px bg-border" />
+              <div className="h-12 w-px bg-border hidden sm:block" />
               <div className="text-center">
                 <div className="text-3xl font-bold text-accent">
                   {quiz.filter((q) => q.task_type === 'multiple_choice').length}
                 </div>
                 <div className="text-muted-foreground">Multiple Choice</div>
               </div>
-              <div className="h-12 w-px bg-border" />
+              <div className="h-12 w-px bg-border hidden sm:block" />
               <div className="text-center">
                 <div className="text-3xl font-bold text-accent">
                   {quiz.filter((q) => q.task_type !== 'multiple_choice').length}
@@ -95,6 +119,115 @@ export function QuizStep({
     );
   }
 
+  // Render answer input based on question type
+  const renderAnswerInput = () => {
+    const type = question.task_type;
+    const hasOptions = question.answer_options && question.answer_options.length > 0;
+
+    // Multiple choice - always show radio buttons
+    if (type === 'multiple_choice' && hasOptions) {
+      return (
+        <RadioGroup
+          value={userAnswers[currentQuestion]}
+          onValueChange={(value) => onSetAnswer(currentQuestion, value)}
+          className="space-y-3"
+        >
+          {question.answer_options!.map((option, index) => (
+            <div
+              key={index}
+              className={cn(
+                'flex items-center space-x-3 p-4 rounded-lg border transition-all duration-200 cursor-pointer',
+                userAnswers[currentQuestion] === option
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-primary/50 hover:bg-muted/50'
+              )}
+            >
+              <RadioGroupItem value={option} id={`option-${index}`} />
+              <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer font-normal">
+                {option}
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
+      );
+    }
+
+    // True/False
+    if (type === 'true_false') {
+      return (
+        <div className="flex gap-4">
+          {['True', 'False'].map((option) => (
+            <Button
+              key={option}
+              variant={userAnswers[currentQuestion] === option ? 'default' : 'outline'}
+              className={cn(
+                'flex-1 h-14 text-lg transition-all duration-200',
+                userAnswers[currentQuestion] === option &&
+                  'gradient-primary text-primary-foreground shadow-soft'
+              )}
+              onClick={() => onSetAnswer(currentQuestion, option)}
+            >
+              {option}
+            </Button>
+          ))}
+        </div>
+      );
+    }
+
+    // Fill in the blank with options - show as selectable chips/buttons
+    if (isFillBlankType(type) && hasOptions) {
+      return (
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">Select the correct answer:</p>
+          <div className="flex flex-wrap gap-3">
+            {question.answer_options!.map((option, index) => (
+              <Button
+                key={index}
+                variant={userAnswers[currentQuestion] === option ? 'default' : 'outline'}
+                className={cn(
+                  'transition-all duration-200',
+                  userAnswers[currentQuestion] === option &&
+                    'gradient-primary text-primary-foreground shadow-soft'
+                )}
+                onClick={() => onSetAnswer(currentQuestion, option)}
+              >
+                {option}
+              </Button>
+            ))}
+          </div>
+          <div className="pt-2">
+            <p className="text-xs text-muted-foreground mb-2">Or type your own answer:</p>
+            <Input
+              value={
+                question.answer_options!.includes(userAnswers[currentQuestion])
+                  ? ''
+                  : userAnswers[currentQuestion]
+              }
+              onChange={(e) => onSetAnswer(currentQuestion, e.target.value)}
+              placeholder="Type your answer here..."
+              className="h-12 text-base"
+            />
+          </div>
+        </div>
+      );
+    }
+
+    // Short answer or fill blank without options - show text input
+    return (
+      <div className="space-y-3">
+        <Label className="text-sm text-muted-foreground">
+          Type your answer below:
+        </Label>
+        <Textarea
+          value={userAnswers[currentQuestion]}
+          onChange={(e) => onSetAnswer(currentQuestion, e.target.value)}
+          placeholder="Type your answer here..."
+          className="min-h-[120px] text-base resize-none"
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6 animate-fade-in-up">
       <div className="flex items-center justify-between">
@@ -114,64 +247,12 @@ export function QuizStep({
       <Card className="shadow-card overflow-hidden animate-scale-in" key={currentQuestion}>
         <div className="p-4 border-b border-border bg-muted/30">
           <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            {question.task_type.replace('_', ' ')}
+            {getQuestionTypeLabel(question.task_type)}
           </span>
         </div>
         <div className="p-6 space-y-6">
           <p className="text-lg font-medium text-foreground">{question.task}</p>
-
-          {question.task_type === 'multiple_choice' && question.answer_options && (
-            <RadioGroup
-              value={userAnswers[currentQuestion]}
-              onValueChange={(value) => onSetAnswer(currentQuestion, value)}
-              className="space-y-3"
-            >
-              {question.answer_options.map((option, index) => (
-                <div
-                  key={index}
-                  className={cn(
-                    'flex items-center space-x-3 p-4 rounded-lg border transition-all duration-200 cursor-pointer',
-                    userAnswers[currentQuestion] === option
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:border-primary/50 hover:bg-muted/50'
-                  )}
-                >
-                  <RadioGroupItem value={option} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer font-normal">
-                    {option}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          )}
-
-          {question.task_type === 'true_false' && (
-            <div className="flex gap-4">
-              {['True', 'False'].map((option) => (
-                <Button
-                  key={option}
-                  variant={userAnswers[currentQuestion] === option ? 'default' : 'outline'}
-                  className={cn(
-                    'flex-1 h-14 text-lg transition-all duration-200',
-                    userAnswers[currentQuestion] === option &&
-                      'gradient-primary text-primary-foreground shadow-soft'
-                  )}
-                  onClick={() => onSetAnswer(currentQuestion, option)}
-                >
-                  {option}
-                </Button>
-              ))}
-            </div>
-          )}
-
-          {question.task_type === 'short_answer' && (
-            <Input
-              value={userAnswers[currentQuestion]}
-              onChange={(e) => onSetAnswer(currentQuestion, e.target.value)}
-              placeholder="Type your answer here..."
-              className="h-12 text-base"
-            />
-          )}
+          {renderAnswerInput()}
         </div>
       </Card>
 
