@@ -8,8 +8,8 @@ interface LoadingSpinnerProps {
 
 export function LoadingSpinner({ message, className }: LoadingSpinnerProps) {
   return (
-    <div className={cn('flex flex-col items-center justify-center gap-3', className)}>
-      <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+    <div className={cn('flex flex-col items-center justify-center gap-2', className)}>
+      <Loader2 className="h-5 w-5 animate-spin text-foreground" />
       {message && (
         <p className="text-sm text-muted-foreground">
           {message}
