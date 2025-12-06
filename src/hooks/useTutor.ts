@@ -176,14 +176,14 @@ export function useTutor() {
 
       const data = await response.json();
 
-      const initialMessages: ChatMessage[] = [
+      const newMessages: ChatMessage[] = [
         { role: 'user', content: 'Please review my quiz answers and provide feedback.' },
         { role: 'assistant', content: data.response },
       ];
 
       setState(prev => ({
         ...prev,
-        chatMessages: initialMessages,
+        chatMessages: [...prev.chatMessages, ...newMessages],
         currentStep: 'feedback',
         isLoading: false,
         error: null,
