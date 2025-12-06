@@ -1,4 +1,4 @@
-import { Check, Upload, FileText, HelpCircle, MessageSquare } from 'lucide-react';
+import { Check, Upload, BookOpen, FileText, HelpCircle, MessageSquare } from 'lucide-react';
 import { Step } from '@/types/tutor';
 import { cn } from '@/lib/utils';
 
@@ -8,12 +8,13 @@ interface StepIndicatorProps {
 
 const steps: { key: Step; label: string; icon: React.ReactNode }[] = [
   { key: 'upload', label: 'Upload', icon: <Upload className="w-4 h-4" /> },
+  { key: 'reader', label: 'Read', icon: <BookOpen className="w-4 h-4" /> },
   { key: 'summary', label: 'Summary', icon: <FileText className="w-4 h-4" /> },
   { key: 'quiz', label: 'Quiz', icon: <HelpCircle className="w-4 h-4" /> },
   { key: 'feedback', label: 'Feedback', icon: <MessageSquare className="w-4 h-4" /> },
 ];
 
-const stepOrder: Step[] = ['upload', 'summary', 'quiz', 'feedback'];
+const stepOrder: Step[] = ['upload', 'reader', 'summary', 'quiz', 'feedback'];
 
 export function StepIndicator({ currentStep }: StepIndicatorProps) {
   const currentIndex = stepOrder.indexOf(currentStep);

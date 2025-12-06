@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 interface UploadStepProps {
   isLoading: boolean;
   error: string | null;
-  onUpload: (file: File) => Promise<boolean>;
+  onUpload: (file: File) => boolean | Promise<boolean>;
   onClearError: () => void;
 }
 

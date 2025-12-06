@@ -6,6 +6,8 @@ const API_BASE_URL = 'https://maga222006-tutoragent.hf.space';
 const initialState: TutorState = {
   currentStep: 'upload',
   sessionId: null,
+  pdfFile: null,
+  pdfUrl: null,
   summary: null,
   quiz: null,
   userAnswers: [],
@@ -33,12 +35,31 @@ export function useTutor() {
     setState(prev => ({ ...prev, isLoading }));
   }, []);
 
-  const uploadPDF = useCallback(async (file: File) => {
+  const uploadPDF = useCallback((file: File) => {
+    const pdfUrl = URL.createObjectURL(file);
+    setState(prev => ({
+      ...prev,
+      pdfFile: file,
+      pdfUrl,
+      currentStep: 'reader',
+      error: null,
+    }));
+    return true;
+  }, []);
+
+  const processPDF = useCallback(async () => {
+    const { pdfFile } = stateRef.current;
+    
+    if (!pdfFile) {
+      setError('No PDF file found. Please upload a document first.');
+      return false;
+    }
+
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', pdfFile);
 
       const response = await fetch(`${API_BASE_URL}/summarizer`, {
         method: 'POST',
@@ -63,11 +84,11 @@ export function useTutor() {
 
       return true;
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to upload document';
+      const message = error instanceof Error ? error.message : 'Failed to process document';
       setState(prev => ({ ...prev, error: message, isLoading: false }));
       return false;
     }
-  }, []);
+  }, [setError]);
 
   const generateQuiz = useCallback(async (numQuestions: number) => {
     const { sessionId } = stateRef.current;
@@ -221,6 +242,10 @@ export function useTutor() {
   }, [setError]);
 
   const resetSession = useCallback(() => {
+    // Clean up PDF URL to prevent memory leaks
+    if (stateRef.current.pdfUrl) {
+      URL.revokeObjectURL(stateRef.current.pdfUrl);
+    }
     setState(initialState);
   }, []);
 
@@ -236,6 +261,7 @@ export function useTutor() {
     setError,
     setLoading,
     uploadPDF,
+    processPDF,
     generateQuiz,
     setAnswer,
     submitQuiz,

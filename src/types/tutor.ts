@@ -25,11 +25,13 @@ export interface SupervisorResponse {
   messages: ChatMessage[];
 }
 
-export type Step = 'upload' | 'summary' | 'quiz' | 'feedback';
+export type Step = 'upload' | 'reader' | 'summary' | 'quiz' | 'feedback';
 
 export interface TutorState {
   currentStep: Step;
   sessionId: string | null;
+  pdfFile: File | null;
+  pdfUrl: string | null;
   summary: string | null;
   quiz: QuizQuestion[] | null;
   userAnswers: string[];
