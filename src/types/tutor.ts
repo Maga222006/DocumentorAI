@@ -1,7 +1,7 @@
 export interface QuizQuestion {
   task_id: number;
   task: string;
-  task_type: 'multiple_choice' | 'short_answer' | 'true_false';
+  task_type: 'multiple_choice' | 'short_answer' | 'true_false' | 'fill_in_the_blank' | 'fill_gap' | 'fill_blank' | string;
   answer_options: string[] | null;
   correct_answer: string;
 }
