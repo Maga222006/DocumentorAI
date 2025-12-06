@@ -255,6 +255,12 @@ export function useTutor() {
     }
   }, []);
 
+  const goToReader = useCallback(() => {
+    if (stateRef.current.pdfUrl) {
+      setState(prev => ({ ...prev, currentStep: 'reader', error: null }));
+    }
+  }, []);
+
   return {
     ...state,
     setStep,
@@ -268,5 +274,6 @@ export function useTutor() {
     sendMessage,
     resetSession,
     goToSummary,
+    goToReader,
   };
 }

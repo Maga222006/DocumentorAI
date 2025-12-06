@@ -27,6 +27,7 @@ const Index = () => {
     sendMessage,
     resetSession,
     goToSummary,
+    goToReader,
   } = useTutor();
 
   const clearError = () => setError(null);
@@ -62,6 +63,7 @@ const Index = () => {
             isLoading={isLoading}
             error={error}
             onGenerateQuiz={generateQuiz}
+            onGoToReader={goToReader}
             onClearError={clearError}
           />
         )}
@@ -86,6 +88,7 @@ const Index = () => {
             onSendMessage={sendMessage}
             onNewDocument={resetSession}
             onNewQuiz={goToSummary}
+            onGoToReader={goToReader}
             onClearError={clearError}
           />
         )}

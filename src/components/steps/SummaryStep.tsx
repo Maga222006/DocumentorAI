@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { FileText, Sparkles, ChevronRight } from 'lucide-react';
+import { FileText, Sparkles, ChevronRight, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
@@ -12,10 +12,11 @@ interface SummaryStepProps {
   isLoading: boolean;
   error: string | null;
   onGenerateQuiz: (numQuestions: number) => Promise<boolean>;
+  onGoToReader: () => void;
   onClearError: () => void;
 }
 
-export function SummaryStep({ summary, isLoading, error, onGenerateQuiz, onClearError }: SummaryStepProps) {
+export function SummaryStep({ summary, isLoading, error, onGenerateQuiz, onGoToReader, onClearError }: SummaryStepProps) {
   const [numQuestions, setNumQuestions] = useState(5);
 
   const handleGenerateQuiz = async () => {
@@ -95,14 +96,25 @@ export function SummaryStep({ summary, isLoading, error, onGenerateQuiz, onClear
             </div>
           </div>
 
-          <Button
-            onClick={handleGenerateQuiz}
-            size="lg"
-            className="w-full gradient-primary text-primary-foreground shadow-soft hover:shadow-elevated transition-all duration-300"
-          >
-            Generate Quiz
-            <ChevronRight className="w-5 h-5 ml-2" />
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              variant="outline"
+              onClick={onGoToReader}
+              size="lg"
+              className="flex-1 h-12"
+            >
+              <BookOpen className="w-4 h-4 mr-2" />
+              View Document
+            </Button>
+            <Button
+              onClick={handleGenerateQuiz}
+              size="lg"
+              className="flex-1 gradient-primary text-primary-foreground shadow-soft hover:shadow-elevated transition-all duration-300"
+            >
+              Generate Quiz
+              <ChevronRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
         </div>
       </Card>
     </div>

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, RefreshCw, Upload, Bot, User } from 'lucide-react';
+import { Send, RefreshCw, Upload, Bot, User, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,7 @@ interface FeedbackStepProps {
   onSendMessage: (message: string) => Promise<boolean>;
   onNewDocument: () => void;
   onNewQuiz: () => void;
+  onGoToReader: () => void;
   onClearError: () => void;
 }
 
@@ -25,6 +26,7 @@ export function FeedbackStep({
   onSendMessage,
   onNewDocument,
   onNewQuiz,
+  onGoToReader,
   onClearError,
 }: FeedbackStepProps) {
   const [input, setInput] = useState('');
@@ -150,11 +152,19 @@ export function FeedbackStep({
       <div className="flex flex-col sm:flex-row gap-4">
         <Button
           variant="outline"
+          onClick={onGoToReader}
+          className="flex-1 h-12"
+        >
+          <BookOpen className="w-4 h-4 mr-2" />
+          View Document
+        </Button>
+        <Button
+          variant="outline"
           onClick={onNewQuiz}
           className="flex-1 h-12"
         >
           <RefreshCw className="w-4 h-4 mr-2" />
-          Generate New Quiz
+          New Quiz
         </Button>
         <Button
           variant="outline"
@@ -162,7 +172,7 @@ export function FeedbackStep({
           className="flex-1 h-12"
         >
           <Upload className="w-4 h-4 mr-2" />
-          Upload New Document
+          New Document
         </Button>
       </div>
     </div>
