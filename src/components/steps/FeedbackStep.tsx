@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, RefreshCw, Upload, Bot, User, BookOpen, Loader2 } from 'lucide-react';
+import { Send, RefreshCw, Upload, Bot, User, BookOpen, Loader2, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { ChatMessage } from '@/types/tutor';
 import { cn } from '@/lib/utils';
@@ -11,6 +12,7 @@ import ReactMarkdown from 'react-markdown';
 
 interface FeedbackStepProps {
   messages: ChatMessage[];
+  quizzesTaken: number;
   isLoading: boolean;
   error: string | null;
   onSendMessage: (message: string) => Promise<boolean>;
@@ -22,6 +24,7 @@ interface FeedbackStepProps {
 
 export function FeedbackStep({
   messages,
+  quizzesTaken,
   isLoading,
   error,
   onSendMessage,
@@ -57,6 +60,26 @@ export function FeedbackStep({
 
   return (
     <div className="space-y-4 animate-fade-in-up">
+      {/* Quiz Stats Card */}
+      <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
+        <CardContent className="py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Trophy className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Quizzes Completed</p>
+                <p className="text-2xl font-bold tabular-nums">{quizzesTaken}</p>
+              </div>
+            </div>
+            <Badge variant="secondary" className="text-xs">
+              This Session
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader className="text-center pb-3">
           <CardTitle>Your Feedback</CardTitle>

@@ -20,6 +20,7 @@ const Index = () => {
     userAnswers,
     chatMessages,
     lastQuizFeedback,
+    quizzesTaken,
     isLoading,
     error,
     setError,
@@ -166,6 +167,7 @@ const Index = () => {
         {currentStep === 'feedback' && (
           <FeedbackStep
             messages={chatMessages}
+            quizzesTaken={quizzesTaken}
             isLoading={isLoading}
             error={error}
             onSendMessage={sendMessage}
