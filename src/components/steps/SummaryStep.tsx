@@ -12,16 +12,17 @@ interface SummaryStepProps {
   summary: string;
   isLoading: boolean;
   error: string | null;
-  onGenerateQuiz: (numQuestions: number) => Promise<boolean>;
+  supervisorFeedback?: string;
+  onGenerateQuiz: (numQuestions: number, comment?: string) => Promise<boolean>;
   onGoToReader: () => void;
   onClearError: () => void;
 }
 
-export function SummaryStep({ summary, isLoading, error, onGenerateQuiz, onGoToReader, onClearError }: SummaryStepProps) {
+export function SummaryStep({ summary, isLoading, error, supervisorFeedback, onGenerateQuiz, onGoToReader, onClearError }: SummaryStepProps) {
   const [numQuestions, setNumQuestions] = useState(5);
 
   const handleGenerateQuiz = async () => {
-    await onGenerateQuiz(numQuestions);
+    await onGenerateQuiz(numQuestions, supervisorFeedback);
   };
 
   if (isLoading) {
