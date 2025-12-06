@@ -93,16 +93,16 @@ export function QuizStep({
               <div className="h-12 w-px bg-border hidden sm:block" />
               <div className="text-center">
                 <div className="text-3xl font-bold text-accent">
-                  {quiz.filter((q) => q.task_type === 'multiple_choice').length}
+                  {quiz.filter((q) => q.task_type === 'multiple_choice' || q.task_type === 'true_false').length}
                 </div>
                 <div className="text-muted-foreground">Multiple Choice</div>
               </div>
               <div className="h-12 w-px bg-border hidden sm:block" />
               <div className="text-center">
                 <div className="text-3xl font-bold text-accent">
-                  {quiz.filter((q) => q.task_type !== 'multiple_choice').length}
+                  {quiz.filter((q) => q.task_type !== 'multiple_choice' && q.task_type !== 'true_false').length}
                 </div>
-                <div className="text-muted-foreground">Other</div>
+                <div className="text-muted-foreground">Type In</div>
               </div>
             </div>
           </div>

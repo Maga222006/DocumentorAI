@@ -86,13 +86,13 @@ export function SummaryStep({ summary, isLoading, error, onGenerateQuiz, onGoToR
               value={[numQuestions]}
               onValueChange={(value) => setNumQuestions(value[0])}
               min={1}
-              max={10}
+              max={25}
               step={1}
               className="w-full"
             />
             <div className="flex justify-between text-xs text-muted-foreground mt-2">
               <span>1</span>
-              <span>10</span>
+              <span>25</span>
             </div>
           </div>
 
