@@ -4,6 +4,7 @@ import { ReaderStep } from '@/components/steps/ReaderStep';
 import { SummaryStep } from '@/components/steps/SummaryStep';
 import { QuizStep } from '@/components/steps/QuizStep';
 import { FeedbackStep } from '@/components/steps/FeedbackStep';
+import { ChatPanel } from '@/components/ChatPanel';
 import { useTutor } from '@/hooks/useTutor';
 import { Step } from '@/types/tutor';
 import { useCallback } from 'react';
@@ -112,26 +113,40 @@ const Index = () => {
         )}
 
         {currentStep === 'reader' && pdfUrl && pdfFile && (
-          <ReaderStep
-            pdfUrl={pdfUrl}
-            fileName={pdfFile.name}
-            isLoading={isLoading}
-            error={error}
-            onProceed={processPDF}
-            onClearError={clearError}
-          />
+          <>
+            <ReaderStep
+              pdfUrl={pdfUrl}
+              fileName={pdfFile.name}
+              isLoading={isLoading}
+              error={error}
+              onProceed={processPDF}
+              onClearError={clearError}
+            />
+            <ChatPanel
+              messages={chatMessages}
+              isLoading={isLoading}
+              onSendMessage={sendMessage}
+            />
+          </>
         )}
 
         {currentStep === 'summary' && summary && (
-          <SummaryStep
-            summary={summary}
-            isLoading={isLoading}
-            error={error}
-            supervisorFeedback={lastQuizFeedback ?? undefined}
-            onGenerateQuiz={generateQuiz}
-            onGoToReader={goToReader}
-            onClearError={clearError}
-          />
+          <>
+            <SummaryStep
+              summary={summary}
+              isLoading={isLoading}
+              error={error}
+              supervisorFeedback={lastQuizFeedback ?? undefined}
+              onGenerateQuiz={generateQuiz}
+              onGoToReader={goToReader}
+              onClearError={clearError}
+            />
+            <ChatPanel
+              messages={chatMessages}
+              isLoading={isLoading}
+              onSendMessage={sendMessage}
+            />
+          </>
         )}
 
         {currentStep === 'quiz' && quiz && (
