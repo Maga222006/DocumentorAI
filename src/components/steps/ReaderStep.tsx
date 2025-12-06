@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ErrorMessage } from '@/components/ErrorMessage';
+import { PdfViewer } from '@/components/PdfViewer';
 import { ArrowRight, FileText } from 'lucide-react';
 
 interface ReaderStepProps {
@@ -38,12 +39,8 @@ export function ReaderStep({
             {fileName}
           </div>
           
-          <div className="w-full h-[60vh] rounded-lg border border-border overflow-hidden bg-muted/30">
-            <iframe
-              src={pdfUrl}
-              className="w-full h-full"
-              title="PDF Preview"
-            />
+          <div className="w-full h-[60vh] rounded-lg border border-border overflow-hidden">
+            <PdfViewer fileUrl={pdfUrl} />
           </div>
 
           {error && <ErrorMessage message={error} onDismiss={onClearError} />}
