@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { ChatMessage } from '@/types/tutor';
 import { cn } from '@/lib/utils';
-
+import ReactMarkdown from 'react-markdown';
 interface FeedbackStepProps {
   messages: ChatMessage[];
   isLoading: boolean;
@@ -95,9 +95,9 @@ export function FeedbackStep({
                       : 'bg-chat-assistant text-foreground rounded-tl-sm'
                   )}
                 >
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                    {message.content}
-                  </p>
+                  <div className="text-sm leading-relaxed prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0">
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
                 </div>
               </div>
             ))}
