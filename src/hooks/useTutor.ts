@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { TutorState, Step, QuizQuestion, ChatMessage } from '@/types/tutor';
 
 const API_BASE_URL = 'https://maga222006-tutoragent.hf.space';
@@ -16,6 +16,10 @@ const initialState: TutorState = {
 
 export function useTutor() {
   const [state, setState] = useState<TutorState>(initialState);
+  
+  // Use ref to always have access to latest state without re-creating callbacks
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
   const setStep = useCallback((step: Step) => {
     setState(prev => ({ ...prev, currentStep: step, error: null }));
@@ -66,7 +70,9 @@ export function useTutor() {
   }, []);
 
   const generateQuiz = useCallback(async (numQuestions: number) => {
-    if (!state.sessionId) {
+    const { sessionId } = stateRef.current;
+    
+    if (!sessionId) {
       setError('No session found. Please upload a document first.');
       return false;
     }
@@ -78,7 +84,7 @@ export function useTutor() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          session_id: state.sessionId,
+          session_id: sessionId,
           num_questions: numQuestions,
         }),
       });
@@ -105,7 +111,7 @@ export function useTutor() {
       setState(prev => ({ ...prev, error: message, isLoading: false }));
       return false;
     }
-  }, [state.sessionId, setError]);
+  }, [setError]);
 
   const setAnswer = useCallback((questionIndex: number, answer: string) => {
     setState(prev => {
@@ -116,7 +122,9 @@ export function useTutor() {
   }, []);
 
   const submitQuiz = useCallback(async () => {
-    if (!state.sessionId || !state.quiz) {
+    const { sessionId, quiz, userAnswers } = stateRef.current;
+    
+    if (!sessionId || !quiz) {
       setError('No quiz found. Please generate a quiz first.');
       return false;
     }
@@ -128,9 +136,9 @@ export function useTutor() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          session_id: state.sessionId,
+          session_id: sessionId,
           message: 'Please review my quiz answers and provide feedback.',
-          user_answers: state.userAnswers,
+          user_answers: userAnswers,
         }),
       });
 
@@ -160,10 +168,12 @@ export function useTutor() {
       setState(prev => ({ ...prev, error: message, isLoading: false }));
       return false;
     }
-  }, [state.sessionId, state.quiz, state.userAnswers, setError]);
+  }, [setError]);
 
   const sendMessage = useCallback(async (message: string) => {
-    if (!state.sessionId) {
+    const { sessionId } = stateRef.current;
+    
+    if (!sessionId) {
       setError('No session found. Please upload a document first.');
       return false;
     }
@@ -181,7 +191,7 @@ export function useTutor() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          session_id: state.sessionId,
+          session_id: sessionId,
           message: message,
         }),
       });
@@ -208,17 +218,17 @@ export function useTutor() {
       setState(prev => ({ ...prev, error: message, isLoading: false }));
       return false;
     }
-  }, [state.sessionId, setError]);
+  }, [setError]);
 
   const resetSession = useCallback(() => {
     setState(initialState);
   }, []);
 
   const goToSummary = useCallback(() => {
-    if (state.summary) {
+    if (stateRef.current.summary) {
       setState(prev => ({ ...prev, currentStep: 'summary', error: null }));
     }
-  }, [state.summary]);
+  }, []);
 
   return {
     ...state,
