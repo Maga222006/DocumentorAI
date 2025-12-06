@@ -174,18 +174,18 @@ export function QuizStep({
       );
     }
 
-    // Fill in the blank with options - show as selectable chips/buttons
+    // Fill in the blank - show 4 answer options only (no text input)
     if (isFillBlankType(type) && hasOptions) {
       return (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">Select the correct answer:</p>
-          <div className="flex flex-wrap gap-3">
-            {question.answer_options!.map((option, index) => (
+          <div className="grid grid-cols-2 gap-3">
+            {question.answer_options!.slice(0, 4).map((option, index) => (
               <Button
                 key={index}
                 variant={userAnswers[currentQuestion] === option ? 'default' : 'outline'}
                 className={cn(
-                  'transition-all duration-200',
+                  'h-12 transition-all duration-200',
                   userAnswers[currentQuestion] === option &&
                     'gradient-primary text-primary-foreground shadow-soft'
                 )}
@@ -194,19 +194,6 @@ export function QuizStep({
                 {option}
               </Button>
             ))}
-          </div>
-          <div className="pt-2">
-            <p className="text-xs text-muted-foreground mb-2">Or type your own answer:</p>
-            <Input
-              value={
-                question.answer_options!.includes(userAnswers[currentQuestion])
-                  ? ''
-                  : userAnswers[currentQuestion]
-              }
-              onChange={(e) => onSetAnswer(currentQuestion, e.target.value)}
-              placeholder="Type your answer here..."
-              className="h-12 text-base"
-            />
           </div>
         </div>
       );
